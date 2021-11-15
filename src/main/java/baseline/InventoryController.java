@@ -8,6 +8,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+
+
 public class InventoryController {
 
     @FXML
@@ -23,54 +25,60 @@ public class InventoryController {
     private MenuBar fileMenu;
 
     @FXML
-    private TableView<?> inventory;
+    private TableView<Items> inventory;
 
     @FXML
     private MenuItem loadFile;
 
     @FXML
-    private TableColumn<?, ?> nameCol;
+    private TableColumn<Items, String> nameCol;
 
     @FXML
     private MenuItem saveFile;
 
     @FXML
-    private TableColumn<?, ?> serialNumCol;
+    private TableColumn<Items, String> serialNumCol;
 
     @FXML
-    private ComboBox<?> sortBox;
+    private ComboBox<String> sortBox;
 
     @FXML
-    private TableColumn<?, ?> valueCol;
+    private TableColumn<Items, Double> valueCol;
 
     @FXML
     void addItem(ActionEvent event) {
-
+        // Add an item to the inventory list
+        // Add the serial number
+        // Add the name
+        // Add the value
+        // Make sure that each serial number is unique
+        // Make sure a valid name is entered
+        // Value must be in US dollars
     }
 
     @FXML
     void clearItem(ActionEvent event) {
-
+        // Clears all existing items in the list
     }
 
     @FXML
     void deleteItem(ActionEvent event) {
-
+        // Deletes a single item from the list
     }
 
     @FXML
     void loadToList(ActionEvent event) {
-
+        // Load a previous list into the current list
     }
 
     @FXML
     void saveToFile(ActionEvent event) {
-
+        // Save the list into a file
     }
 
     @FXML
     void sortItems(ActionEvent event) {
-
+        // Sort items by serial number, name, or value
     }
 
 }
