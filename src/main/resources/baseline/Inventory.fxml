@@ -7,21 +7,21 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-
 
 <AnchorPane prefHeight="615.0" prefWidth="1010.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="baseline.InventoryController">
    <children>
-      <TableView fx:id="inventory" layoutX="211.0" layoutY="113.0" prefHeight="390.0" prefWidth="534.0">
+      <TableView fx:id="inventory" layoutX="35.0" layoutY="65.0" prefHeight="390.0" prefWidth="534.0">
         <columns>
           <TableColumn fx:id="serialNumCol" prefWidth="146.0" text="Serial Number" />
           <TableColumn fx:id="nameCol" prefWidth="211.0" text="Name" />
             <TableColumn fx:id="valueCol" prefWidth="175.0" text="Value" />
         </columns>
       </TableView>
-      <Button fx:id="addButton" layoutX="211.0" layoutY="518.0" mnemonicParsing="false" onAction="#addItem" text="Add Item" />
-      <Button fx:id="deleteButton" layoutX="302.0" layoutY="518.0" mnemonicParsing="false" onAction="#deleteItem" text="Delete Item" />
-      <Button fx:id="clearButton" layoutX="402.0" layoutY="518.0" mnemonicParsing="false" onAction="#clearItem" text="Clear Items" />
+      <Button fx:id="addButton" layoutX="35.0" layoutY="470.0" mnemonicParsing="false" onAction="#addItem" text="Add Item" />
+      <Button fx:id="deleteButton" layoutX="35.0" layoutY="506.0" mnemonicParsing="false" onAction="#deleteItem" text="Delete Item" />
+      <Button fx:id="clearButton" layoutX="36.0" layoutY="543.0" mnemonicParsing="false" onAction="#clearItem" text="Clear Items" />
       <MenuBar fx:id="fileMenu" layoutY="2.0" prefHeight="25.0" prefWidth="1010.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
@@ -32,6 +32,9 @@
           </Menu>
         </menus>
       </MenuBar>
-      <ComboBox fx:id="sortBox" layoutX="505.0" layoutY="518.0" onAction="#sortItems" prefWidth="150.0" promptText="Sort" />
+      <ComboBox fx:id="sortBox" layoutX="610.0" layoutY="65.0" onAction="#sortItems" prefWidth="150.0" promptText="Sort" />
+      <TextField fx:id="serialTextField" layoutX="124.0" layoutY="470.0" prefHeight="25.0" prefWidth="112.0" promptText="Serial Number" />
+      <TextField fx:id="nameTextField" layoutX="252.0" layoutY="470.0" prefHeight="25.0" prefWidth="112.0" promptText="Name" />
+      <TextField fx:id="valueTextField" layoutX="382.0" layoutY="470.0" prefHeight="25.0" prefWidth="123.0" promptText="Value" />
    </children>
 </AnchorPane>
