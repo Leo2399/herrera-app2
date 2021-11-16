@@ -55,4 +55,9 @@ public class Items {
     public void setValue(BigDecimal value) {
         this.value.set(value);
     }
+
+    @Override
+    public String toString(){
+        return this.getSerialNum()+" "+this.getName()+" "+this.getValue();
+    }
 }
