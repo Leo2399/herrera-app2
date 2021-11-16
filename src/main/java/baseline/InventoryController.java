@@ -1,13 +1,12 @@
 package baseline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 
 
 public class InventoryController {
@@ -43,14 +42,38 @@ public class InventoryController {
     private ComboBox<String> sortBox;
 
     @FXML
-    private TableColumn<Items, Double> valueCol;
+    private TableColumn<Items, BigDecimal> valueCol;
+
+    @FXML
+    private TextField serialTextField;
+
+    @FXML
+    private TextField nameTextField;
+
+    @FXML
+    private TextField valueTextField;
+
+    private final ObservableList<Items> list = FXCollections.observableArrayList();
+    private final NumberFormat currency = NumberFormat.getCurrencyInstance();
 
     @FXML
     void addItem(ActionEvent event) {
         // Add an item to the inventory list
+
+        BigDecimal value = new BigDecimal(valueTextField.getText());
+        currency.format(value);
+
+        list.add(new Items(serialTextField.getText(), nameTextField.getText(), value));
+        inventory.setItems(list);
+
         // Add the serial number
+        serialNumCol.setCellValueFactory(param -> param.getValue().serialNumProperty());
+
         // Add the name
+        nameCol.setCellValueFactory(param -> param.getValue().nameProperty());
+
         // Add the value
+        valueCol.setCellValueFactory(param -> param.getValue().valueProperty());
         // Make sure that each serial number is unique
         // Make sure a valid name is entered
         // Value must be in US dollars
@@ -59,11 +82,13 @@ public class InventoryController {
     @FXML
     void clearItem(ActionEvent event) {
         // Clears all existing items in the list
+        inventory.getItems().clear();
     }
 
     @FXML
     void deleteItem(ActionEvent event) {
         // Deletes a single item from the list
+        inventory.getItems().removeAll(inventory.getSelectionModel().getSelectedItem());
     }
 
     @FXML
