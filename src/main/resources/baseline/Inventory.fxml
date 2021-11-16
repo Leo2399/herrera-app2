@@ -10,7 +10,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="615.0" prefWidth="1010.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="baseline.InventoryController">
+<AnchorPane fx:id="pane" prefHeight="615.0" prefWidth="1010.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="baseline.InventoryController">
    <children>
       <TableView fx:id="inventory" layoutX="35.0" layoutY="65.0" prefHeight="390.0" prefWidth="534.0">
         <columns>
