@@ -94,7 +94,7 @@ public class InventoryController {
             errorMessage.setContentText("Name must be between 2 to 256 characters in length");
             errorMessage.showAndWait();
         }else{
-            
+
             // Add the name
             nameCol.setCellValueFactory(param -> param.getValue().nameProperty());
         }
