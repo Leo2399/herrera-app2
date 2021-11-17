@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InventoryControllerTest {
 
-    private Items expected = new Items("A-aaa-11-22", "Name", BigDecimal.valueOf(20));
+    private Items expected = new Items("A-aaa-11-22", "Name", "$20.00");
 
     @Test
     void addItem() {
@@ -18,6 +18,6 @@ class InventoryControllerTest {
     @Test
     void testSaveToFile(){
         System.out.println(expected);
-        assertEquals("A-aaa-11-22 Name 20", expected.toString());
+        assertEquals("A-aaa-11-22 Name $20.00", expected.toString());
     }
 }
