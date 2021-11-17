@@ -1,0 +1,78 @@
+@startuml
+
+class InventoryManagementApplication {
+    +start (): void
+    +main (): void
+}
+
+Application <-- InventoryManagementApplication
+
+class InventoryController {
+    -TableView<Items> inventory
+    -MenuItem loadFile
+    -MenuItem saveFile
+    -TableColumn<Items, String> serialNumCol
+    -TableColumn<Items, String> nameCol
+    -TableColumn<Items, String> valueCol
+    -TextField serialTextField
+    -TextField nameTextField
+    -TextField valueTextField
+    -TextField serialSearch
+    -TextField nameSearch
+    -ObservableList<Items> list
+    -ValidateItems validate
+    -NumberFormat getCurrency
+    -FileChooser fileChooser
+
+    addItem (ActionEvent event): void
+    clearItem (ActionEvent event): void
+    deleteItem (ActionEvent event): void
+    loadToList (ActionEvent event): void
+    saveToFile (ActionEvent event): void
+
+    -save (ObservableList<Items> items, File file): void
+    +initialize (): void
+}
+
+class Items {
+    -SimpleStringProperty serialNum
+    -SimpleStringProperty name
+    -SimpleStringProperty value
+--
+    ..Constructor..
+    +Items (String serialNum, String name, String value)
+
+    ..Getters..
+    +getSerialNum (): String
+    +getName (): String
+    +getValue (): String
+
+    ..Setters..
+    +setSerialNum (String serialNum): void
+    +setName (String name): void
+    +setValue (String value): void
+
+    ..Properties..
+    +serialNumProperty (): SimpleStringProperty
+    +nameProperty (): SimpleStringProperty
+    +valueProperty (): SimpleStringProperty
+
+    --
+    +toString (): String
+}
+
+InventoryController <-- Items
+
+class ValidateItems {
+    -Alert errorMessage
+
+    +validNumber (String number): boolean
+    +validName (String name): boolean
+    +validValue (String value): boolean
+
+    +validate (String serialNum, String itemName, String itemValue): boolean
+}
+
+InventoryController <--ValidateItems
+
+@enduml
