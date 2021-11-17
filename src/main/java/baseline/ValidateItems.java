@@ -47,10 +47,6 @@ public class ValidateItems {
         boolean name = validName(itemName);
         boolean value = validValue(itemValue);
 
-        if(serialNumber && name && value){
-            return true;
-        }else {
-            return false;
-        }
+        return serialNumber && name && value;
     }
 }
