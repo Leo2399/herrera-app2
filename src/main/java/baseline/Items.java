@@ -1,23 +1,16 @@
 package baseline;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-
-import java.math.BigDecimal;
 
 public class Items {
     private final SimpleStringProperty serialNum;
     private final SimpleStringProperty name;
-    private final SimpleObjectProperty<BigDecimal> value;
+    private final SimpleStringProperty value;
 
-    public Items(String serialNum, String name, BigDecimal value){
+    public Items(String serialNum, String name, String value){
         this.serialNum = new SimpleStringProperty(serialNum);
         this.name = new SimpleStringProperty(name);
-        this.value = new SimpleObjectProperty<>(value);
+        this.value = new SimpleStringProperty(value);
     }
 
     public String getSerialNum() {
@@ -44,15 +37,15 @@ public class Items {
         this.name.set(name);
     }
 
-    public BigDecimal getValue() {
+    public String getValue() {
         return value.get();
     }
 
-    public SimpleObjectProperty<BigDecimal> valueProperty() {
+    public SimpleStringProperty valueProperty() {
         return value;
     }
 
-    public void setValue(BigDecimal value) {
+    public void setValue(String value) {
         this.value.set(value);
     }
 
