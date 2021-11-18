@@ -31,7 +31,7 @@ public class ValidateItems {
     }
 
     public boolean validValue(String value){
-        if(value.matches("[A-Za-z][0]") || value.isEmpty()){
+        if(value.matches("[A-Za-z0]") || value.isEmpty()){
             errorMessage.setHeaderText("Value error");
             errorMessage.setContentText("Enter a valid price value");
             errorMessage.showAndWait();
