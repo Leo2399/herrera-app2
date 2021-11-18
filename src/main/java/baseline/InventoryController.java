@@ -29,7 +29,7 @@ public class InventoryController implements Initializable {
 
     @FXML
     private TableView<Items> inventory;
-    
+
     @FXML
     private TableColumn<Items, String> nameCol;
 
