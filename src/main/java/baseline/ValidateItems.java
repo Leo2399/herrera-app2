@@ -4,7 +4,7 @@ import javafx.scene.control.Alert;
 
 public class ValidateItems {
 
-    private Alert errorMessage = new Alert(Alert.AlertType.ERROR);
+    private final Alert errorMessage = new Alert(Alert.AlertType.ERROR);
 
     public boolean validNumber(String number){
         if(number.matches("[A-Z][-][A-Z0-9]{3}[-][A-Z0-9]{3}[-][A-Z0-9]{3}")){
