@@ -67,20 +67,12 @@ public class InventoryController implements Initializable {
         // And will not add anything to the table
         if(validateItems.validate(serialTextField.getText(), nameTextField.getText(), valueTextField.getText())){
 
+            // Converts value from text field to a decimal
             BigDecimal value = new BigDecimal(valueTextField.getText());
 
-            // If valid, add the data to the table
+            // If valid, add the data to the table, value is converted to US dollars
             list.add(new Items(serialTextField.getText(), nameTextField.getText(), getCurrency.format(value)));
             inventory.setItems(list);
-
-            // Add serial number
-            serialNumCol.setCellValueFactory(param -> param.getValue().serialNumProperty());
-
-            // Add name
-            nameCol.setCellValueFactory(param -> param.getValue().nameProperty());
-
-            // Add value
-            valueCol.setCellValueFactory(param -> param.getValue().valueProperty());
 
             // Clears text fields to add new information
             serialTextField.clear();
@@ -89,18 +81,13 @@ public class InventoryController implements Initializable {
         }
 
         searchList();
-        inventory.setEditable(true);
-        editable();
         // Make sure that each serial number is unique
-        // Make sure a valid name is entered
-        // Value must be in US dollars
     }
 
     @FXML
     void clearItem(ActionEvent event) {
         // Clears all existing items in the list
         list.clear();
-        inventory.getItems().clear();
     }
 
     @FXML
@@ -108,7 +95,6 @@ public class InventoryController implements Initializable {
         // Deletes a single item from the list
         int selected = inventory.getSelectionModel().getSelectedIndex();
         list.remove(selected);
-
     }
 
     @FXML
@@ -135,7 +121,7 @@ public class InventoryController implements Initializable {
         }
     }
 
-    private void save(ObservableList<Items> items, File file) throws IOException {
+    private void save(ObservableList<Items> items, File file) {
         try(BufferedWriter output = new BufferedWriter(new FileWriter(file))){
             for(Items i : items){
                 output.write(i.toString());
@@ -177,15 +163,12 @@ public class InventoryController implements Initializable {
         SortedList<Items> sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(inventory.comparatorProperty());
 
+        // Find item based on search
         inventory.setItems(sortedList);
     }
 
     private void editable(){
-
         // Helper method when editing an item's serial number, name, and value
-        serialNumCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        valueCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
         // Validates whether the serial number is in right format and is unique
         // will display appropriate error message
@@ -217,12 +200,21 @@ public class InventoryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb){
 
-        // Set initial directory and extensions
-        fileChooser.setInitialDirectory(new File("C:\\temp"));
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("TSV (tab-separated values)","*.txt"),
-                new FileChooser.ExtensionFilter("HTML file","*.html"),
-                new FileChooser.ExtensionFilter("JSON file","*.json"));
+        // Add serial number
+        serialNumCol.setCellValueFactory(param -> param.getValue().serialNumProperty());
+
+        // Add name
+        nameCol.setCellValueFactory(param -> param.getValue().nameProperty());
+
+        // Add value
+        valueCol.setCellValueFactory(param -> param.getValue().valueProperty());
+
+        // Allow editing
+        inventory.setEditable(true);
+        editable();
+        serialNumCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        valueCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
         // Sort by serial number
         inventory.getSortOrder().add(serialNumCol);
@@ -232,6 +224,13 @@ public class InventoryController implements Initializable {
 
         //Sort by value
         inventory.getSortOrder().add(valueCol);
+
+        // Set initial directory and extensions
+        fileChooser.setInitialDirectory(new File("C:\\temp"));
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("TSV (tab-separated values)","*.txt"),
+                new FileChooser.ExtensionFilter("HTML file","*.html"),
+                new FileChooser.ExtensionFilter("JSON file","*.json"));
     }
 
 }
