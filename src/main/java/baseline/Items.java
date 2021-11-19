@@ -51,6 +51,6 @@ public class Items {
 
     @Override
     public String toString(){
-        return this.getSerialNum()+" "+this.getName()+" "+this.getValue();
+        return this.getSerialNum()+"\t"+this.getName()+"\t"+this.getValue();
     }
 }
