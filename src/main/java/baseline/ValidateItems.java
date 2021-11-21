@@ -1,5 +1,11 @@
+/*
+ *  UCF COP3330 Fall 2021 Application Assignment 2 Solution
+ *  Copyright 2021 Leonardo Herrera
+ */
+
 package baseline;
 
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
 public class ValidateItems {
@@ -17,6 +23,21 @@ public class ValidateItems {
 
             return false;
         }
+    }
+
+    public boolean uniqueNumber(ObservableList<Items> list, String number){
+        for(Items items : list){
+            if(items.getSerialNum().equals(number)){
+                errorMessage.setHeaderText("Serial number error");
+                errorMessage.setContentText("Serial number already exists\n" +
+                        "Must be unique");
+                errorMessage.showAndWait();
+
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public boolean validName(String name){
