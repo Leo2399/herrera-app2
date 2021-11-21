@@ -11,14 +11,12 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 
 public class InventoryController implements Initializable {
@@ -59,6 +57,7 @@ public class InventoryController implements Initializable {
     private final NumberFormat getCurrency = NumberFormat.getCurrencyInstance();
     private final FileChooser fileChooser = new FileChooser();
 
+
     @FXML
     void addItem(ActionEvent event) {
         // Add an item to the inventory list
@@ -98,12 +97,17 @@ public class InventoryController implements Initializable {
     }
 
     @FXML
-    void loadToList(ActionEvent event) {
+    void loadToList(ActionEvent event) throws IOException {
         // Load a previous list into the current list
+
+        fileChooser.setTitle("Load list");
+        File file = fileChooser.showOpenDialog(new Stage());
+
+        load(file);
     }
 
     @FXML
-    void saveToFile(ActionEvent event) throws IOException {
+    void saveToFile(ActionEvent event) {
         // Save the list into a file
         Stage newStage = new Stage();
         fileChooser.setTitle("Save list");
@@ -137,7 +141,30 @@ public class InventoryController implements Initializable {
         }
     }
 
+    private void load(File file) throws IOException {
+        // Read the file chosen
+        BufferedReader loadFile = new BufferedReader(new FileReader(file));
+
+        // Scanner to read through the file
+        Scanner readFile = new Scanner(loadFile);
+
+        list.clear();
+
+        while(readFile.hasNext()){
+
+            // Split the data at tab space
+            String[] info = readFile.nextLine().split("\t");
+
+            // Replace current list with list read from the file
+            list.add(new Items(info[0], info[1], info[2]));
+            inventory.setItems(list);
+        }
+
+        loadFile.close();
+    }
+
     private void searchList(){
+        // Method created to be able to search the list
 
         // Created a filter list
         FilteredList<Items> filteredList = new FilteredList<>(list, p->true);
@@ -170,30 +197,53 @@ public class InventoryController implements Initializable {
     private void editable(){
         // Helper method when editing an item's serial number, name, and value
 
-        // Validates whether the serial number is in right format and is unique
-        // will display appropriate error message
+        serialNumCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        valueCol.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        // Edit serial number on double-click
         serialNumCol.setOnEditCommit(event -> {
-            if(validateItems.validNumber(event.getNewValue())){
-                event.getTableView().getItems().get(event.getTablePosition().getRow()).setSerialNum(event.getNewValue());
+            String newNum = event.getNewValue();
+            String oldNum = event.getOldValue();
+
+            // Validates new serial number, will display appropriate error message
+            if(validateItems.validNumber(newNum)){
+                event.getTableView().getItems().get(event.getTablePosition().getRow()).setSerialNum(newNum);
             }else{
-                event.getTableView().getItems().get(event.getTablePosition().getRow()).setSerialNum(event.getOldValue());
+                event.getTableView().getItems().get(event.getTablePosition().getRow()).setSerialNum(oldNum);
             }
+            serialNumCol.setVisible(false);
+            serialNumCol.setVisible(true);
         });
 
-        // Validates name, if invalid an error message will display
+        // Edit name on double-click
         nameCol.setOnEditCommit(event -> {
-            if(validateItems.validName(event.getNewValue())){
-                event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
+            String newName = event.getNewValue();
+            String oldName = event.getOldValue();
+
+            // Validates new name, if invalid an error message will display
+            if(validateItems.validName(newName)){
+                event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(newName);
             }else{
-                event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(event.getOldValue());
+                event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(oldName);
             }
+            nameCol.setVisible(false);
+            nameCol.setVisible(true);
         });
 
-        // Validates value, if invalid an error message will display
+        // Edit value on double-click
         valueCol.setOnEditCommit(event -> {
-            if(validateItems.validValue(event.getNewValue())){
-                event.getTableView().getItems().get(event.getTablePosition().getRow()).setValue(event.getNewValue());
+            String newValue = event.getNewValue();
+            String oldValue = event.getOldValue();
+
+            // Validates new value, if invalid an error message will display
+            if(validateItems.validValue(newValue)){
+                event.getTableView().getItems().get(event.getTablePosition().getRow()).setValue(newValue);
+            }else{
+                event.getTableView().getItems().get(event.getTablePosition().getRow()).setValue(oldValue);
             }
+            valueCol.setVisible(false);
+            valueCol.setVisible(true);
         });
     }
 
@@ -212,9 +262,6 @@ public class InventoryController implements Initializable {
         // Allow editing
         inventory.setEditable(true);
         editable();
-        serialNumCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        valueCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
         // Sort by serial number
         inventory.getSortOrder().add(serialNumCol);
