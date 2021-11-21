@@ -5,12 +5,10 @@ class InventoryManagementApplication {
     +main (): void
 }
 
-Application <-- InventoryManagementApplication
+Application <|-- InventoryManagementApplication
 
 class InventoryController {
     -TableView<Items> inventory
-    -MenuItem loadFile
-    -MenuItem saveFile
     -TableColumn<Items, String> serialNumCol
     -TableColumn<Items, String> nameCol
     -TableColumn<Items, String> valueCol
@@ -29,8 +27,11 @@ class InventoryController {
     deleteItem (ActionEvent event): void
     loadToList (ActionEvent event): void
     saveToFile (ActionEvent event): void
+    -editSerialNumber (): void
+    -editName (): void
+    -editValue (): void
+    -searchList (): void
 
-    -save (ObservableList<Items> items, File file): void
     +initialize (): void
 }
 
@@ -62,11 +63,14 @@ class Items {
 }
 
 InventoryController <-- Items
+ValidateItems <-- Items
+FileManagement <-- Items
 
 class ValidateItems {
     -Alert errorMessage
 
     +validNumber (String number): boolean
+    +uniqueNumber (ObservableList<Items> list, String number): boolean
     +validName (String name): boolean
     +validValue (String value): boolean
 
@@ -74,5 +78,12 @@ class ValidateItems {
 }
 
 InventoryController <--ValidateItems
+
+class FileManagement {
+    +save (ObservableList<Items> list, File file): void
+    +load (ObservableList<Items> list, File file): void
+}
+
+InventoryController <-- FileManagement
 
 @enduml
