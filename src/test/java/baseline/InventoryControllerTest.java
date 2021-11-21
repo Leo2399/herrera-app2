@@ -95,7 +95,7 @@ class InventoryControllerTest {
         list.add(new Items("C-D84-GGG-LOL", "Please give me a C", "$1.00"));
 
         for(Items i : list){
-            String lowerCaseFilter = i.getSerialNum().toLowerCase(Locale.ROOT);
+            String lowerCaseFilter = i.getSerialNum().toLowerCase();
             if(lowerCaseFilter.contains("a")){
                 search.add(i);
             }
@@ -115,7 +115,7 @@ class InventoryControllerTest {
         list.add(new Items("C-D84-GGG-LOL", "Please give me a C", "$1.00"));
 
         for(Items i : list){
-            String lowerCaseFilter = i.getName().toLowerCase(Locale.ROOT);
+            String lowerCaseFilter = i.getName().toLowerCase();
             if(lowerCaseFilter.contains("p")){
                 search.add(i);
             }
