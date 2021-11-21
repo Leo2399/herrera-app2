@@ -7,9 +7,9 @@ import java.util.Scanner;
 
 public class FileManagement {
 
-    public void save(ObservableList<Items> items, File file) {
+    public void save(ObservableList<Items> list, File file) {
         try(BufferedWriter output = new BufferedWriter(new FileWriter(file))){
-            for(Items i : items){
+            for(Items i : list){
                 output.write(i.toString());
                 output.newLine();
             }
