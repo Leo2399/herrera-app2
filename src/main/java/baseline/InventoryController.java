@@ -78,7 +78,7 @@ public class InventoryController implements Initializable {
             BigDecimal price = new BigDecimal(value);
 
             // If valid, add the data to the table, value is converted to US dollars
-            list.add(new Items(serialTextField.getText(), nameTextField.getText(), getCurrency.format(price)));
+            list.add(new Items(serialNumber, name, getCurrency.format(price)));
             inventory.setItems(list);
 
             // Clears text fields to add new information
