@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Fall 2021 Application Assignment 2 Solution
+ *  Copyright 2021 Leonardo Herrera
+ */
+
 package baseline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,7 +21,6 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 
 public class InventoryController implements Initializable {
@@ -62,15 +66,19 @@ public class InventoryController implements Initializable {
     void addItem(ActionEvent event) {
         // Add an item to the inventory list
 
+        String serialNumber = serialTextField.getText();
+        String name = nameTextField.getText();
+        String value = valueTextField.getText();
+
         // Will check is the data is valid, if not valid appropriate error messages will pop up
         // And will not add anything to the table
-        if(validateItems.validate(serialTextField.getText(), nameTextField.getText(), valueTextField.getText())){
+        if(validateItems.validate(serialNumber, name, value) && validateItems.uniqueNumber(list, serialNumber)){
 
             // Converts value from text field to a decimal
-            BigDecimal value = new BigDecimal(valueTextField.getText());
+            BigDecimal price = new BigDecimal(value);
 
             // If valid, add the data to the table, value is converted to US dollars
-            list.add(new Items(serialTextField.getText(), nameTextField.getText(), getCurrency.format(value)));
+            list.add(new Items(serialTextField.getText(), nameTextField.getText(), getCurrency.format(price)));
             inventory.setItems(list);
 
             // Clears text fields to add new information
@@ -80,7 +88,6 @@ public class InventoryController implements Initializable {
         }
 
         searchList();
-        // Make sure that each serial number is unique
     }
 
     @FXML
@@ -100,67 +107,26 @@ public class InventoryController implements Initializable {
     void loadToList(ActionEvent event) throws IOException {
         // Load a previous list into the current list
 
+        FileManagement loadFile = new FileManagement();
+
         fileChooser.setTitle("Load list");
         File file = fileChooser.showOpenDialog(new Stage());
 
-        load(file);
+        loadFile.load(list, file);
+        inventory.setItems(list);
+        searchList();
     }
 
     @FXML
     void saveToFile(ActionEvent event) {
         // Save the list into a file
+        FileManagement saveFile = new FileManagement();
+
         Stage newStage = new Stage();
         fileChooser.setTitle("Save list");
 
-        if(list.isEmpty()){
-            newStage.initOwner(this.fileMenu.getScene().getWindow());
-            Alert empty = new Alert(Alert.AlertType.ERROR, "Empty table", ButtonType.OK);
-            empty.setContentText("Table is empty");
-        }else{
-            File file = fileChooser.showSaveDialog(newStage);
-
-            if(file!=null){
-                save(inventory.getItems(), file);
-            }
-        }
-    }
-
-    private void save(ObservableList<Items> items, File file) {
-        try(BufferedWriter output = new BufferedWriter(new FileWriter(file))){
-            for(Items i : items){
-                output.write(i.toString());
-                output.newLine();
-            }
-        }catch (IOException ex){
-            Alert io = new Alert(Alert.AlertType.ERROR, "No File", ButtonType.OK);
-            io.setContentText("File could not be created");
-            io.showAndWait();
-            if(io.getResult()==ButtonType.OK){
-                io.close();
-            }
-        }
-    }
-
-    private void load(File file) throws IOException {
-        // Read the file chosen
-        BufferedReader loadFile = new BufferedReader(new FileReader(file));
-
-        // Scanner to read through the file
-        Scanner readFile = new Scanner(loadFile);
-
-        list.clear();
-
-        while(readFile.hasNext()){
-
-            // Split the data at tab space
-            String[] info = readFile.nextLine().split("\t");
-
-            // Replace current list with list read from the file
-            list.add(new Items(info[0], info[1], info[2]));
-            inventory.setItems(list);
-        }
-
-        loadFile.close();
+        File file = fileChooser.showSaveDialog(newStage);
+        saveFile.save(inventory.getItems(), file);
     }
 
     private void searchList(){
@@ -194,12 +160,10 @@ public class InventoryController implements Initializable {
         inventory.setItems(sortedList);
     }
 
-    private void editable(){
-        // Helper method when editing an item's serial number, name, and value
+    private void editSerialNumber(){
+        // Helper method when editing an item's serial number
 
         serialNumCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        valueCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
         // Edit serial number on double-click
         serialNumCol.setOnEditCommit(event -> {
@@ -207,7 +171,7 @@ public class InventoryController implements Initializable {
             String oldNum = event.getOldValue();
 
             // Validates new serial number, will display appropriate error message
-            if(validateItems.validNumber(newNum)){
+            if(validateItems.validNumber(newNum) && validateItems.uniqueNumber(list, newNum)){
                 event.getTableView().getItems().get(event.getTablePosition().getRow()).setSerialNum(newNum);
             }else{
                 event.getTableView().getItems().get(event.getTablePosition().getRow()).setSerialNum(oldNum);
@@ -215,6 +179,12 @@ public class InventoryController implements Initializable {
             serialNumCol.setVisible(false);
             serialNumCol.setVisible(true);
         });
+    }
+
+    private void editName(){
+        // Method to edit item's name in list
+
+        nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
         // Edit name on double-click
         nameCol.setOnEditCommit(event -> {
@@ -230,6 +200,12 @@ public class InventoryController implements Initializable {
             nameCol.setVisible(false);
             nameCol.setVisible(true);
         });
+    }
+
+    private void editValue(){
+        // Method to edit item's value in the list
+
+        valueCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
         // Edit value on double-click
         valueCol.setOnEditCommit(event -> {
@@ -261,7 +237,9 @@ public class InventoryController implements Initializable {
 
         // Allow editing
         inventory.setEditable(true);
-        editable();
+        editSerialNumber();
+        editName();
+        editValue();
 
         // Sort by serial number
         inventory.getSortOrder().add(serialNumCol);
@@ -279,5 +257,4 @@ public class InventoryController implements Initializable {
                 new FileChooser.ExtensionFilter("HTML file","*.html"),
                 new FileChooser.ExtensionFilter("JSON file","*.json"));
     }
-
 }
