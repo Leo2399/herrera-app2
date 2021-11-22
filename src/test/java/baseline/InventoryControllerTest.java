@@ -143,7 +143,7 @@ class InventoryControllerTest {
     }
 
     @Test
-    void testLoadFile() throws IOException {
+    void testLoadFile() {
         FileManagement testLoad = new FileManagement();
 
         testLoad.load(list, new File("C:\\temp/example.txt"));
@@ -152,5 +152,4 @@ class InventoryControllerTest {
 
         System.out.println("Size of loaded list: " +list.size());
     }
-
 }
