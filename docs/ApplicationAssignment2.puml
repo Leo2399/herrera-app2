@@ -82,6 +82,7 @@ InventoryController <--ValidateItems
 class FileManagement {
     +save (ObservableList<Items> list, File file): void
     +load (ObservableList<Items> list, File file): void
+    +saveJson (ObservableList<Items> list, File file): void
 }
 
 InventoryController <-- FileManagement
