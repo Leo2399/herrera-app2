@@ -5,6 +5,8 @@
 
 package baseline;
 
+
+import com.google.gson.Gson;
 import javafx.collections.ObservableList;
 
 import java.io.*;
@@ -23,7 +25,7 @@ public class FileManagement {
         }
     }
 
-    public void load(ObservableList<Items> list, File file) throws IOException {
+    public void load(ObservableList<Items> list, File file) {
 
         try (BufferedReader loadFile = new BufferedReader(new FileReader(file))) {
             Scanner readFile = new Scanner(loadFile);
@@ -37,5 +39,20 @@ public class FileManagement {
         } catch (IOException ex) {
             ex.getStackTrace();
         }
+    }
+
+    public void saveJson(ObservableList<Items> list, File file) throws IOException {
+        // I wanted to use this method to save a Json file
+
+        Gson gson = new Gson();
+        String toString = null;
+        for(Items i : list){
+            toString = gson.toJson(i);
+        }
+
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+        assert toString != null;
+        bw.write(toString);
+        bw.close();
     }
 }
