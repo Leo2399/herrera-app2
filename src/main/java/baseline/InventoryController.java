@@ -20,6 +20,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.NumberFormat;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 
@@ -56,7 +57,7 @@ public class InventoryController implements Initializable {
     @FXML
     private TextField nameSearch;
 
-    private final ObservableList<Items> list = FXCollections.observableArrayList();
+    private  ObservableList<Items> list = FXCollections.observableArrayList();
     private final ValidateItems validateItems = new ValidateItems();
     private final NumberFormat getCurrency = NumberFormat.getCurrencyInstance();
     private final FileChooser fileChooser = new FileChooser();
@@ -77,8 +78,11 @@ public class InventoryController implements Initializable {
             // Converts value from text field to a decimal
             BigDecimal price = new BigDecimal(value);
 
-            // If valid, add the data to the table, value is converted to US dollars
-            list.add(new Items(serialNumber, name, getCurrency.format(price)));
+            // Converts data to US dollars
+            String dollars = getCurrency.format(price);
+
+            // If valid, add the data to the table
+            list.add(new Items(serialNumber, name, dollars));
             inventory.setItems(list);
 
             // Clears text fields to add new information
@@ -118,7 +122,7 @@ public class InventoryController implements Initializable {
     }
 
     @FXML
-    void saveToFile(ActionEvent event) {
+    void saveToFile(ActionEvent event) throws IOException {
         // Save the list into a file
         FileManagement saveFile = new FileManagement();
 
@@ -126,7 +130,12 @@ public class InventoryController implements Initializable {
         fileChooser.setTitle("Save list");
 
         File file = fileChooser.showSaveDialog(newStage);
-        saveFile.save(inventory.getItems(), file);
+
+        if(file.getName().contains(".txt")) {
+            saveFile.save(inventory.getItems(), file);
+        }else if(file.getName().contains(".json")){
+            saveFile.saveJson(list, file);
+        }
     }
 
     private void searchList(){
@@ -248,7 +257,7 @@ public class InventoryController implements Initializable {
         inventory.getSortOrder().add(nameCol);
 
         //Sort by value
-        inventory.getSortOrder().add(valueCol);
+        list.sort(Comparator.comparing(Items::getValue));
 
         // Set initial directory and extensions
         fileChooser.setInitialDirectory(new File("C:\\temp"));
