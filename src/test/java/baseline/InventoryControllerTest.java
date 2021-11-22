@@ -146,9 +146,11 @@ class InventoryControllerTest {
     void testLoadFile() {
         FileManagement testLoad = new FileManagement();
 
-        testLoad.load(list, new File("C:\\temp/example.txt"));
+        int expected = 15;
 
-        assertEquals(2, list.size());
+        testLoad.load(list, new File("C:\\temp/LoadForDemo.txt"));
+
+        assertEquals(expected, list.size());
 
         System.out.println("Size of loaded list: " +list.size());
     }
